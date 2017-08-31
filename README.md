@@ -1,5 +1,4 @@
-# runBayes
-A Bayesian Analysis of Personal Running Goal
+# Run Bayes
 
 In 2016 I had the crazy goal of running 1000 miles in 52 weeks. Being a data scientist, I decided to model my chances of success. This repository contains my data, my codes, and some output from my analysis. For more details see [here](https://chrisdienes.github.io/blog/2017/08/25/run-bayes). 
 
