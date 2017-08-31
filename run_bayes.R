@@ -1,7 +1,7 @@
 
-# Heavy Handed Bayesian Analysis
-# April 2016
-# christopher.dienes@seagate.com
+# Bayesian Analysis of Running Goal
+# Circa 2016
+# By https://chrisdienes.github.io/
 
 # ---------------- #
 # Load Stuff
@@ -21,69 +21,9 @@ sum(myData$Value,na.rm=TRUE)
 sum(myData$TM,na.rm=TRUE)
 100 - 100*sum(myData$TM,na.rm=TRUE)/sum(myData$Value,na.rm=TRUE)
 
-# windows()
-# K = 17
-# plot(0:K, c(0,myData$Total[1:K]), type="l", xlim=c(0,52), xaxt = "n",
-#      xlab="Week", ylab = "Cumulative Total", 
-#      #ylim = c(0, max(1000,max(hold[[K-2]][,52]))), 
-#      ylim = c(0,1500),
-#      main=paste0(format(100*mean(hold[[K-2]][,52] >= 1000),digits=1, nsmall=1), "% Chance of Reaching Goal") )
-# axis(side = 1, at = c(0,K,52))
-# rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightblue")
-# lines(0:K, c(0,myData$Total[1:K]), type="l", lwd=2)
-# fan(hold[[K-2]][,(K+1):52], start=K+1, alpha=1)
-# abline(h = 1000, lty="dotted")
-
-N = 52
-makeplot <- function(){
-  for(K in -9:(N+9)){
-    if(K <=0){
-      plot(0, 0, type="l", xlim=c(0,52), xaxt = "n",
-           xlab="Week", ylab = "Cumulative Total", 
-           ylim = c(0,1500),
-           main=paste0(format(round(100*mean(hold[[1]][,52] >= 1000),digits=0),digits=1, nsmall=1), "% Chance of Reaching Goal") )
-      axis(side = 1, at = c(0,52))
-      rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightblue")
-      lines(c(0,1),c(0,20), type="l",lwd=2)
-      fan(hold[[1]][,1:52], start=1, alpha=1)
-      abline(h = 1000, lty="dotted")
-    }
-    if(K < N & K > 0){
-      plot(0:K, c(0,myData$Total[1:K]), type="l", xlim=c(0,52), xaxt = "n",
-           xlab="Week", ylab = "Cumulative Total", 
-           ylim = c(0,1500),
-           main=paste0(format(100*mean(hold[[K+1]][,52] >= 1000),digits=1, nsmall=1), "% Chance of Reaching Goal") )
-      axis(side = 1, at = c(K,52))
-      rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightblue")
-      lines(0:K, c(0,myData$Total[1:K]), type="l", lwd=2)
-      fan(hold[[K+1]][,K:52], start=K, alpha=1)
-      abline(h = 1000, lty="dotted")
-    }
-    if(K >= N){
-      plot(0:N, c(0,myData$Total[1:N]), type="l", xlim=c(0,52), xaxt = "n",
-           xlab="Week", ylab = "Cumulative Total", 
-           ylim = c(0,1500),
-           main="100.0% Chance of Reaching Goal")
-      axis(side = 1, at = c(N,52))
-      rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "lightblue")
-      lines(0:N, c(0,myData$Total[1:N]), type="l", lwd=2)
-      #fan(hold[[N+1]][,N:52], start=N, alpha=1)
-      abline(h = 1000, lty="dotted")
-    }
-  }
-}
-
-setwd("C:/Users/Chris/Desktop/")
-oopt = ani.options(interval = 0.33, nmax = N+11)
-saveGIF(makeplot(),movie.name = "runBayes.gif")
-ani.options(oopt)
-
-
 # ---------------------------- #
-# Heavy Handed quasi-Bayesian
+# Functions for analysis
 # ---------------------------- #
-
-# my Functions:
 update_p_posterior = function(x, a_prior, b_prior){
   t = length(x)
   alpha =  a_prior  + sum(x)
@@ -149,7 +89,9 @@ report_new_params = function(data, var_0, x_0, wmean, wvar){
   return(c(mean = mean_t, var = var_t))
 }
 
-
+# ---------------------------- #
+# Setting Initial Conditions
+# ---------------------------- #
 # Initials: Risk of complete failure:
 catastrophe_p = 1-(.95)^(1/52)
 # Initials: Evolving probability of down week:
@@ -183,7 +125,9 @@ down_params = my_beta_params(beta_mean = down_beta_mean, beta_var = down_beta_va
 # mean(x)
 # upp[1]/sum(upp)
 #hist(rbeta(10000, down_a, down_b), xlim=c(0,1))
-
+# ------------------------------------------------------------------- #
+# Below is the update to myResults.RDA ran at the end of each week
+# ------------------------------------------------------------------- #
 #options(warn=2)
 # Get Data:
 #S = 0:sum(!is.na(myData$Value))
