@@ -5,5 +5,5 @@ In 2016 I had the crazy goal of running 1000 miles in 52 weeks. Being a data sci
 
 I decided to perform a Bayesian analysis with priors selected to achieve a 50% initial success likelihood. The result is depicted in the following gif:
 <div style="text-align:center;">
-  ![runBayes.gif](https://github.com/ChrisDienes/runBayes/blob/master/runBayes.gif "runBayes.gif")
+  <img src="https://github.com/ChrisDienes/runBayes/blob/master/runBayes.gif" alt="runBayes.gif">
 </div>
